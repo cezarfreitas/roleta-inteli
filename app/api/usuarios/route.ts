@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
         u.created_at,
         u.updated_at,
         GROUP_CONCAT(DISTINCT f.nome) as filas_ativas,
-        GROUP_CONCAT(DISTINCT f.cor) as cores_filas
+        GROUP_CONCAT(DISTINCT f.cor) as cores_filas,
+        GROUP_CONCAT(DISTINCT f.id) as filas_ids
       FROM usuarios u
       LEFT JOIN usuarios_fila uf ON u.id = uf.usuario_id
       LEFT JOIN filas f ON uf.fila_id = f.id AND f.ativa = true

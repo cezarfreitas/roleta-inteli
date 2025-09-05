@@ -14,11 +14,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verificar se o usuário existe com email e ID correspondentes
-    const usuarios = await query(
-      'SELECT id, nome, email, telefone, whatsapp FROM usuarios WHERE email = ? AND id = ?',
-      [email, parseInt(id)]
-    ) as any[];
+    // Verificar se o usuário existe com email e ID correspondentes e buscar sua fila
+    const usuarios = await query(`
+      SELECT 
+        u.id, 
+        u.nome, 
+        u.email, 
+        u.telefone, 
+        u.whatsapp,
+        uf.fila_id
+      FROM usuarios u
+      LEFT JOIN usuarios_fila uf ON u.id = uf.usuario_id AND uf.removido = FALSE
+      WHERE u.email = ? AND u.id = ?
+      LIMIT 1
+    `, [email, parseInt(id)]) as any[];
 
     console.log('📋 API Auth: Resultado da consulta:', usuarios);
 
@@ -40,7 +49,8 @@ export async function POST(request: NextRequest) {
         nome: usuario.nome,
         email: usuario.email,
         telefone: usuario.telefone,
-        whatsapp: usuario.whatsapp
+        whatsapp: usuario.whatsapp,
+        fila_id: usuario.fila_id
       }
     });
 

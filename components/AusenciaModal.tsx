@@ -29,9 +29,10 @@ interface AusenciaModalProps {
   isOpen: boolean;
   onClose: () => void;
   usuario: Usuario;
+  filaId?: number;
 }
 
-export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModalProps) {
+export default function AusenciaModal({ isOpen, onClose, usuario, filaId }: AusenciaModalProps) {
   const [ausencias, setAusencias] = useState<Ausencia[]>([]);
   const [usuariosLista, setUsuariosLista] = useState<UsuarioLista[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +69,8 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
 
   const fetchUsuariosLista = async () => {
     try {
-      const response = await fetch('/api/usuarios/lista');
+      const url = filaId ? `/api/usuarios/lista?fila_id=${filaId}` : '/api/usuarios/lista';
+      const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
         setUsuariosLista(data);

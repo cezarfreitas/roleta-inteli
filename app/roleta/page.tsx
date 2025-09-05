@@ -9,6 +9,7 @@ interface Usuario {
   email: string;
   telefone: string;
   whatsapp: string;
+  fila_id?: number;
 }
 
 interface Ausencia {
@@ -89,7 +90,9 @@ export default function RoletaPage() {
 
   const fetchUsuariosLista = async () => {
     try {
-      const response = await fetch('/api/usuarios/lista');
+      if (!usuario?.fila_id) return;
+      
+      const response = await fetch(`/api/usuarios/lista?fila_id=${usuario.fila_id}`);
       if (response.ok) {
         const data = await response.json();
         setUsuariosLista(data);
