@@ -37,7 +37,7 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy public directory if it exists, otherwise create empty directory
 RUN mkdir -p ./public
-COPY --from=builder /app/public/* ./public/ 2>/dev/null || true
+COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir -p .next
