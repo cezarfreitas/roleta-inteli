@@ -16,6 +16,7 @@ interface Ausencia {
   data_inicio: string;
   data_fim: string;
   motivo: string;
+  responsavel?: string;
   ativa: boolean;
   fila_nome: string;
 }
@@ -36,6 +37,7 @@ export default function RoletaPage() {
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [motivo, setMotivo] = useState('');
+  const [responsavel, setResponsavel] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +91,8 @@ export default function RoletaPage() {
         body: JSON.stringify({
           data_inicio: dataInicio,
           data_fim: dataFim,
-          motivo
+          motivo,
+          responsavel
         })
       });
 
@@ -99,6 +102,7 @@ export default function RoletaPage() {
         setDataInicio('');
         setDataFim('');
         setMotivo('');
+        setResponsavel('');
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Erro ao criar ausência');
@@ -261,6 +265,9 @@ export default function RoletaPage() {
                       Motivo
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Responsável
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Fila
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -286,6 +293,9 @@ export default function RoletaPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {ausencia.motivo}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {ausencia.responsavel || '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {ausencia.fila_nome}
@@ -353,6 +363,19 @@ export default function RoletaPage() {
                     rows={3}
                     placeholder="Descreva o motivo da ausência..."
                     required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Responsável
+                  </label>
+                  <input
+                    type="text"
+                    value={responsavel}
+                    onChange={(e) => setResponsavel(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Nome do responsável pela ausência"
                   />
                 </div>
 

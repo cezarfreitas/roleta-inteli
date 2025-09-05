@@ -14,6 +14,7 @@ interface Ausencia {
   data_inicio: string;
   data_fim: string;
   motivo: string;
+  responsavel?: string;
   ativa: boolean;
   created_at: string;
 }
@@ -32,7 +33,8 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
   const [formData, setFormData] = useState({
     data_inicio: '',
     data_fim: '',
-    motivo: ''
+    motivo: '',
+    responsavel: ''
   });
 
   useEffect(() => {
@@ -139,7 +141,8 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
     setFormData({
       data_inicio: '',
       data_fim: '',
-      motivo: ''
+      motivo: '',
+      responsavel: ''
     });
     setEditingAusencia(null);
     setShowForm(false);
@@ -150,7 +153,8 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
     setFormData({
       data_inicio: ausencia.data_inicio,
       data_fim: ausencia.data_fim,
-      motivo: ausencia.motivo
+      motivo: ausencia.motivo,
+      responsavel: ausencia.responsavel || ''
     });
     setShowForm(true);
   };
@@ -226,6 +230,19 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={3}
                     required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Responsável
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.responsavel}
+                    onChange={(e) => setFormData({ ...formData, responsavel: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Nome do responsável pela ausência"
                   />
                 </div>
                 
@@ -321,6 +338,12 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
                       <div className="text-sm text-gray-700">
                         <span className="font-medium">Motivo:</span> {ausencia.motivo}
                       </div>
+                      
+                      {ausencia.responsavel && (
+                        <div className="text-sm text-gray-700">
+                          <span className="font-medium">Responsável:</span> {ausencia.responsavel}
+                        </div>
+                      )}
                     </div>
                     
                     <div className="flex items-center space-x-2 ml-4">

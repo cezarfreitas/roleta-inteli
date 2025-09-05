@@ -15,6 +15,7 @@ export async function GET(
         a.data_inicio,
         a.data_fim,
         a.motivo,
+        a.responsavel,
         a.ativa,
         a.created_at,
         f.nome as fila_nome
@@ -41,7 +42,7 @@ export async function POST(
 ) {
   try {
     const usuarioId = parseInt(params.id);
-    const { data_inicio, data_fim, motivo, fila_id } = await request.json();
+    const { data_inicio, data_fim, motivo, fila_id, responsavel } = await request.json();
 
     if (!data_inicio || !data_fim || !motivo) {
       return NextResponse.json(
@@ -75,9 +76,9 @@ export async function POST(
 
     // Inserir nova ausência
     const result = await query(`
-      INSERT INTO ausencias (usuario_id, fila_id, data_inicio, data_fim, motivo, ativa)
-      VALUES (?, ?, ?, ?, ?, true)
-    `, [usuarioId, filaId, data_inicio, data_fim, motivo]);
+      INSERT INTO ausencias (usuario_id, fila_id, data_inicio, data_fim, motivo, responsavel, ativa)
+      VALUES (?, ?, ?, ?, ?, ?, true)
+    `, [usuarioId, filaId, data_inicio, data_fim, motivo, responsavel || null]);
 
     return NextResponse.json({
       message: 'Ausência registrada com sucesso',
