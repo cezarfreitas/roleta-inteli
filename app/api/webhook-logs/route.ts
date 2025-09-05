@@ -3,7 +3,7 @@ import { query } from '@/lib/database';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const filaId = searchParams.get('fila_id');
     
     let query_sql = 'SELECT * FROM webhook_logs';

@@ -9,7 +9,7 @@ export async function GET(
     console.log('🔍 API: Buscando usuários para fila ID:', params.id);
     
     const filaId = parseInt(params.id);
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const limit = parseInt(searchParams.get('limit') || '50');
 
     console.log('📋 Parâmetros:', { filaId, limit });

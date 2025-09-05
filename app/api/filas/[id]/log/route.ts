@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const filaId = parseInt(params.id);
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const limit = parseInt(searchParams.get('limit') || '50');
 
     // Buscar log da fila com informações do usuário

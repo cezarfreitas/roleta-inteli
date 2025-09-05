@@ -7,7 +7,7 @@ export async function POST(
 ) {
   try {
     const filaId = parseInt(params.id);
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const leadId = searchParams.get('lead');
 
     // Buscar usuário atual (primeira posição)
