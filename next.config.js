@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
   env: {
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_USER: process.env.DB_USER || 'root',
@@ -8,3 +9,5 @@ module.exports = {
     WEBHOOK_URL: process.env.WEBHOOK_URL || 'https://webhook.site/your-unique-url',
   },
 }
+
+module.exports = nextConfig

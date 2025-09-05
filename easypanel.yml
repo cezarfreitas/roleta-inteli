@@ -1,0 +1,64 @@
+# Configuração para EasyPanel
+# Este arquivo pode ser usado como referência para configurar o projeto no EasyPanel
+
+name: roleta-inteli
+description: Sistema de Filas de Atendimento com integração de leads
+
+# Configurações do build
+build:
+  context: .
+  dockerfile: Dockerfile
+
+# Configurações da aplicação
+app:
+  port: 3000
+  protocol: http
+  healthcheck:
+    path: /
+    interval: 30s
+    timeout: 10s
+
+# Variáveis de ambiente necessárias
+environment:
+  # Banco de Dados
+  - DB_HOST=${DB_HOST}
+  - DB_USER=${DB_USER}
+  - DB_PASSWORD=${DB_PASSWORD}
+  - DB_NAME=${DB_NAME}
+  
+  # Autenticação JWT
+  - JWT_SECRET=${JWT_SECRET}
+  - ADMIN_USERNAME=${ADMIN_USERNAME}
+  - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+  
+  # API de Leads
+  - LEAD_API_ID=${LEAD_API_ID}
+  - LEAD_API_TOKEN=${LEAD_API_TOKEN}
+  
+  # Next.js
+  - NODE_ENV=production
+  - PORT=3000
+  - HOSTNAME=0.0.0.0
+
+# Recursos recomendados
+resources:
+  cpu: 0.5
+  memory: 512Mi
+  storage: 1Gi
+
+# Configurações de rede
+network:
+  ports:
+    - 3000:3000
+
+# Configurações de domínio (opcional)
+domain:
+  enabled: false
+  # subdomain: roleta-inteli
+  # custom_domain: your-domain.com
+
+# Auto deploy
+deploy:
+  auto_deploy: true
+  branch: master
+  trigger: push
