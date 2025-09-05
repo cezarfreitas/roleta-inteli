@@ -37,7 +37,7 @@ export async function DELETE(
       );
     } catch (logError) {
       // Log é opcional, não falha a operação principal
-      console.warn('Não foi possível registrar log:', logError.message);
+      console.warn('Não foi possível registrar log:', (logError as Error).message);
     }
 
     return NextResponse.json({ 

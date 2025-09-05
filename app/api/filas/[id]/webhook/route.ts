@@ -151,7 +151,7 @@ export async function POST(
                 owner: currentOwner
               }),
               'erro',
-              updateError.message
+              (updateError as Error).message
             ]);
           }
         }

@@ -126,12 +126,12 @@ export async function POST(request: NextRequest) {
     // Enviar webhook se necessário
     if (webhookData) {
       try {
-        await enviarWebhook(webhookData, usuario.usuario_id);
-        resultado.webhook_enviado = true;
+        await enviarWebhook(webhookData, usuario_id);
+        (resultado as any).webhook_enviado = true;
       } catch (webhookError) {
         console.error('Erro ao enviar webhook:', webhookError);
-        resultado.webhook_enviado = false;
-        resultado.webhook_error = 'Erro ao enviar webhook';
+        (resultado as any).webhook_enviado = false;
+        (resultado as any).webhook_error = 'Erro ao enviar webhook';
       }
     }
 

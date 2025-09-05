@@ -61,7 +61,7 @@ export default function FilaTab({ onRefresh }: FilaTabProps) {
 
       if (response.ok) {
         await fetchFila();
-        onRefresh();
+        onRefresh?.();
       } else {
         const error = await response.json();
         alert(error.error || 'Erro ao chamar próximo usuário');
@@ -87,7 +87,7 @@ export default function FilaTab({ onRefresh }: FilaTabProps) {
 
       if (response.ok) {
         await fetchFila();
-        onRefresh();
+        onRefresh?.();
       } else {
         const error = await response.json();
         alert(error.error || 'Erro ao finalizar usuário');
@@ -113,7 +113,7 @@ export default function FilaTab({ onRefresh }: FilaTabProps) {
 
       if (response.ok) {
         await fetchFila();
-        onRefresh();
+        onRefresh?.();
       } else {
         const error = await response.json();
         alert(error.error || 'Erro ao pular usuário');

@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest) {
     const configAtualizada = await query(
       'SELECT * FROM configuracoes WHERE chave = ?',
       [chave]
-    );
+    ) as any[];
 
     return NextResponse.json(configAtualizada[0]);
   } catch (error) {

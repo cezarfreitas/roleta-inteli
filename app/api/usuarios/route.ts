@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       [result.insertId]
     );
 
-    return NextResponse.json(novoUsuario[0], { status: 201 });
+    return NextResponse.json((novoUsuario as any[])[0], { status: 201 });
   } catch (error) {
     console.error('Error creating usuario:', error);
     return NextResponse.json(

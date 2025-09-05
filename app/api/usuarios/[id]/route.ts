@@ -18,7 +18,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(usuario[0]);
+    return NextResponse.json((usuario as any[])[0]);
   } catch (error) {
     console.error('Error fetching usuario:', error);
     return NextResponse.json(
@@ -75,7 +75,7 @@ export async function PUT(
       [params.id]
     );
 
-    return NextResponse.json(usuarioAtualizado[0]);
+    return NextResponse.json((usuarioAtualizado as any[])[0]);
   } catch (error) {
     console.error('Error updating usuario:', error);
     return NextResponse.json(

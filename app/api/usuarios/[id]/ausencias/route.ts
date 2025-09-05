@@ -81,7 +81,7 @@ export async function POST(
 
     return NextResponse.json({
       message: 'Ausência registrada com sucesso',
-      id: result.insertId
+      id: (result as any).insertId
     });
 
   } catch (error: any) {
