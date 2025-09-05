@@ -21,10 +21,17 @@ interface Ausencia {
   fila_nome: string;
 }
 
+interface UsuarioLista {
+  id: number;
+  nome: string;
+  email: string;
+}
+
 export default function RoletaPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [ausencias, setAusencias] = useState<Ausencia[]>([]);
+  const [usuariosLista, setUsuariosLista] = useState<UsuarioLista[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -55,6 +62,7 @@ export default function RoletaPage() {
         const data = await response.json();
         setUsuario(data.usuario);
         await fetchAusencias(data.usuario.id);
+        await fetchUsuariosLista();
         setIsLoggedIn(true);
       } else {
         const errorData = await response.json();
@@ -76,6 +84,18 @@ export default function RoletaPage() {
       }
     } catch (error) {
       console.error('Erro ao buscar ausências:', error);
+    }
+  };
+
+  const fetchUsuariosLista = async () => {
+    try {
+      const response = await fetch('/api/usuarios/lista');
+      if (response.ok) {
+        const data = await response.json();
+        setUsuariosLista(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar lista de usuários:', error);
     }
   };
 
@@ -295,7 +315,10 @@ export default function RoletaPage() {
                         {ausencia.motivo}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {ausencia.responsavel || '-'}
+                        {ausencia.responsavel ? 
+                          (usuariosLista.find(u => u.id.toString() === ausencia.responsavel)?.nome || ausencia.responsavel) 
+                          : '-'
+                        }
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {ausencia.fila_nome}
@@ -370,13 +393,18 @@ export default function RoletaPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Responsável
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={responsavel}
                     onChange={(e) => setResponsavel(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Nome do responsável pela ausência"
-                  />
+                  >
+                    <option value="">Selecione um responsável (opcional)</option>
+                    {usuariosLista.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.nome} ({user.email})
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4">

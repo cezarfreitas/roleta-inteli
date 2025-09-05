@@ -19,6 +19,12 @@ interface Ausencia {
   created_at: string;
 }
 
+interface UsuarioLista {
+  id: number;
+  nome: string;
+  email: string;
+}
+
 interface AusenciaModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -27,6 +33,7 @@ interface AusenciaModalProps {
 
 export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModalProps) {
   const [ausencias, setAusencias] = useState<Ausencia[]>([]);
+  const [usuariosLista, setUsuariosLista] = useState<UsuarioLista[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingAusencia, setEditingAusencia] = useState<Ausencia | null>(null);
@@ -40,6 +47,7 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
   useEffect(() => {
     if (isOpen) {
       fetchAusencias();
+      fetchUsuariosLista();
     }
   }, [isOpen, usuario.id]);
 
@@ -55,6 +63,18 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
       console.error('Erro ao buscar ausências:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUsuariosLista = async () => {
+    try {
+      const response = await fetch('/api/usuarios/lista');
+      if (response.ok) {
+        const data = await response.json();
+        setUsuariosLista(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar lista de usuários:', error);
     }
   };
 
@@ -237,13 +257,18 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Responsável
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.responsavel}
                     onChange={(e) => setFormData({ ...formData, responsavel: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Nome do responsável pela ausência"
-                  />
+                  >
+                    <option value="">Selecione um responsável (opcional)</option>
+                    {usuariosLista.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.nome} ({user.email})
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 
                 <div className="flex space-x-3">
@@ -341,7 +366,9 @@ export default function AusenciaModal({ isOpen, onClose, usuario }: AusenciaModa
                       
                       {ausencia.responsavel && (
                         <div className="text-sm text-gray-700">
-                          <span className="font-medium">Responsável:</span> {ausencia.responsavel}
+                          <span className="font-medium">Responsável:</span> {
+                            usuariosLista.find(u => u.id.toString() === ausencia.responsavel)?.nome || ausencia.responsavel
+                          }
                         </div>
                       )}
                     </div>
